@@ -517,562 +517,198 @@ public class CallableStatementValidator extends PreparedStatementValidator imple
 
     @Override
     public void setNClob(String parameterName, NClob value) throws SQLException {
-        String methodCall = "setNClob(" + parameterName + ", " + value + ")";
-        try
-        {
-            realCallableStatement.setNClob(parameterName, value);
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall, s);
-            throw s;
-        }
-        reportReturn(methodCall);
+        realCallableStatement.setNClob(parameterName, value);
     }
 
     @Override
     public void setClob(String parameterName, Reader reader, long length) throws SQLException {
-        String methodCall = "setClob(" + parameterName + ", " + reader + ", " + length + ")";
-        try
-        {
-            realCallableStatement.setClob(parameterName, reader, length);
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall, s);
-            throw s;
-        }
-        reportReturn(methodCall);
+        realCallableStatement.setClob(parameterName, reader, length);
     }
 
     @Override
     public void setBlob(String parameterName, InputStream inputStream, long length) throws SQLException {
-        String methodCall = "setBlob(" + parameterName + ", " + inputStream + ", " + length + ")";
-        try
-        {
-            realCallableStatement.setBlob(parameterName, inputStream, length);
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall, s);
-            throw s;
-        }
-        reportReturn(methodCall);
+        realCallableStatement.setBlob(parameterName, inputStream, length);
     }
 
     @Override
     public void setNClob(String parameterName, Reader reader, long length) throws SQLException {
-        String methodCall = "setNClob(" + parameterName + ", " + reader + ", " + length + ")";
-        try
-        {
-            realCallableStatement.setNClob(parameterName, reader, length);
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall, s);
-            throw s;
-        }
-        reportReturn(methodCall);
+        realCallableStatement.setNClob(parameterName, reader, length);
     }
 
     @Override
     public NClob getNClob(int parameterIndex) throws SQLException {
-        String methodCall = "getNClob(" + parameterIndex + ")";
-        try
-        {
-            return (NClob) reportReturn(methodCall, realCallableStatement.getNClob(parameterIndex));
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall, s);
-            throw s;
-        }
+        return realCallableStatement.getNClob(parameterIndex);
     }
 
     @Override
     public NClob getNClob(String parameterName) throws SQLException {
-        String methodCall = "getNClob(" + parameterName + ")";
-        try
-        {
-            return (NClob) reportReturn(methodCall, realCallableStatement.getNClob(parameterName));
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall, s);
-            throw s;
-        }
+        return realCallableStatement.getNClob(parameterName);
     }
 
     @Override
     public void setSQLXML(String parameterName, SQLXML xmlObject) throws SQLException {
-        String methodCall = "setSQLXML(" + parameterName + ", " + xmlObject + ")";
-        try
-        {
-            realCallableStatement.setSQLXML(parameterName, xmlObject);
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall, s);
-            throw s;
-        }
-        reportReturn(methodCall);
+        realCallableStatement.setSQLXML(parameterName, xmlObject);
     }
 
     @Override
     public SQLXML getSQLXML(int parameterIndex) throws SQLException {
-        String methodCall = "getSQLXML(" + parameterIndex + ")";
-        try
-        {
-            return (SQLXML) reportReturn(methodCall, realCallableStatement.getSQLXML(parameterIndex));
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall, s);
-            throw s;
-        }
+        return realCallableStatement.getSQLXML(parameterIndex);
     }
 
     @Override
     public SQLXML getSQLXML(String parameterName) throws SQLException {
-        String methodCall = "getSQLXML(" + parameterName + ")";
-        try
-        {
-            return (SQLXML) reportReturn(methodCall, realCallableStatement.getSQLXML(parameterName));
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall, s);
-            throw s;
-        }
-
+        return realCallableStatement.getSQLXML(parameterName);
     }
 
     @Override
     public String getNString(int parameterIndex) throws SQLException {
-        String methodCall = "getNString(" + parameterIndex + ")";
-        try
-        {
-            return (String) reportReturn(methodCall, realCallableStatement.getNString(parameterIndex));
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall, s);
-            throw s;
-        }
+        return getNString(parameterIndex);
     }
 
     @Override
     public String getNString(String parameterName) throws SQLException {
-        String methodCall = "getNString(" + parameterName + ")";
-        try
-        {
-            return (String) reportReturn(methodCall, realCallableStatement.getNString(parameterName));
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall, s);
-            throw s;
-        }
+        return getNString(parameterName);
     }
 
     @Override
     public Reader getNCharacterStream(int parameterIndex) throws SQLException {
-        String methodCall = "getNCharacterStream(" + parameterIndex + ")";
-        try
-        {
-            return (Reader) reportReturn(methodCall, realCallableStatement.getNCharacterStream(parameterIndex));
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall, s);
-            throw s;
-        }
+        return getNCharacterStream(parameterIndex);
     }
 
     @Override
     public Reader getNCharacterStream(String parameterName) throws SQLException {
-        String methodCall = "getNCharacterStream(" + parameterName + ")";
-        try
-        {
-            return (Reader) reportReturn(methodCall, realCallableStatement.getNCharacterStream(parameterName));
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall, s);
-            throw s;
-        }
+        return getNCharacterStream(parameterName);
     }
 
     @Override
     public Reader getCharacterStream(int parameterIndex) throws SQLException {
-        String methodCall = "getCharacterStream(" + parameterIndex + ")";
-        try
-        {
-            return (Reader) reportReturn(methodCall, realCallableStatement.getCharacterStream(parameterIndex));
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall, s);
-            throw s;
-        }
+        return getCharacterStream(parameterIndex);
     }
 
     @Override
     public Reader getCharacterStream(String parameterName) throws SQLException {
-        String methodCall = "getCharacterStream(" + parameterName + ")";
-        try
-        {
-            return (Reader) reportReturn(methodCall, realCallableStatement.getCharacterStream(parameterName));
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall, s);
-            throw s;
-        }
+        return realCallableStatement.getCharacterStream(parameterName);
     }
 
     @Override
     public void setBlob(String parameterName, Blob x) throws SQLException {
-        String methodCall = "setBlob(" + parameterName + ", " + x + ")";
-        try
-        {
-            realCallableStatement.setBlob(parameterName, x);
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall, s);
-            throw s;
-        }
-        reportReturn(methodCall);
+        realCallableStatement.setBlob(parameterName, x);
     }
 
     @Override
     public void setClob(String parameterName, Clob x) throws SQLException {
-        String methodCall = "setClob(" + parameterName + ", " + x + ")";
-        try
-        {
-            realCallableStatement.setClob(parameterName, x);
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall, s);
-            throw s;
-        }
-        reportReturn(methodCall);
+        realCallableStatement.setClob(parameterName, x);
     }
 
     @Override
     public void setAsciiStream(String parameterName, InputStream x, long length) throws SQLException {
-        String methodCall = "setAsciiStream(" + parameterName + ", " + x + ", " + length + ")";
-        try
-        {
-            realCallableStatement.setAsciiStream(parameterName, x, length);
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall, s);
-            throw s;
-        }
-        reportReturn(methodCall);
+        realCallableStatement.setAsciiStream(parameterName, x, length);
     }
 
     @Override
     public void setBinaryStream(String parameterName, InputStream x, long length) throws SQLException {
-        String methodCall = "setBinaryStream(" + parameterName + ", " + x + ", " + length + ")";
-        try
-        {
-            realCallableStatement.setBinaryStream(parameterName, x, length);
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall, s);
-            throw s;
-        }
-        reportReturn(methodCall);
+        realCallableStatement.setBinaryStream(parameterName, x, length);
     }
 
     @Override
     public void setCharacterStream(String parameterName, Reader reader, long length) throws SQLException {
-        String methodCall = "setCharacterStream(" + parameterName + ", " + reader + ", " + length + ")";
-        try
-        {
-            realCallableStatement.setCharacterStream(parameterName, reader, length);
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall, s);
-            throw s;
-        }
-        reportReturn(methodCall);
+        realCallableStatement.setCharacterStream(parameterName, reader, length);
     }
 
     @Override
     public void setAsciiStream(String parameterName, InputStream x) throws SQLException {
-        String methodCall = "setAsciiStream(" + parameterName + ", " + x + ")";
-        try
-        {
-            realCallableStatement.setAsciiStream(parameterName, x);
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall, s);
-            throw s;
-        }
-        reportReturn(methodCall);
+        realCallableStatement.setAsciiStream(parameterName, x);
     }
 
     @Override
     public void setBinaryStream(String parameterName, InputStream x) throws SQLException {
-        String methodCall = "setBinaryStream(" + parameterName + ", " + x + ")";
-        try
-        {
-            realCallableStatement.setBinaryStream(parameterName, x);
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall, s);
-            throw s;
-        }
-        reportReturn(methodCall);
+        realCallableStatement.setBinaryStream(parameterName, x);
     }
 
     @Override
     public void setCharacterStream(String parameterName, Reader reader) throws SQLException {
-        String methodCall = "setCharacterStream(" + parameterName + ", " + reader + ")";
-        try
-        {
-            realCallableStatement.setCharacterStream(parameterName, reader);
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall, s);
-            throw s;
-        }
-        reportReturn(methodCall);
+        realCallableStatement.setCharacterStream(parameterName, reader);
     }
 
     @Override
     public void setNCharacterStream(String parameterName, Reader reader) throws SQLException {
-        String methodCall = "setNCharacterStream(" + parameterName + ", " + reader + ")";
-        try
-        {
-            realCallableStatement.setNCharacterStream(parameterName, reader);
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall, s);
-            throw s;
-        }
-        reportReturn(methodCall);
+        realCallableStatement.setNCharacterStream(parameterName, reader);
     }
 
     @Override
     public void setClob(String parameterName, Reader reader) throws SQLException {
-        String methodCall = "setClob(" + parameterName + ", " + reader + ")";
-        try
-        {
-            realCallableStatement.setClob(parameterName, reader);
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall, s);
-            throw s;
-        }
-        reportReturn(methodCall);
+        realCallableStatement.setClob(parameterName, reader);
     }
 
     @Override
     public void setBlob(String parameterName, InputStream inputStream) throws SQLException {
-        String methodCall = "setBlob(" + parameterName + ", " + inputStream + ")";
-        try
-        {
-            realCallableStatement.setBlob(parameterName, inputStream);
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall, s);
-            throw s;
-        }
-        reportReturn(methodCall);
+        realCallableStatement.setBlob(parameterName, inputStream);
     }
 
     @Override
     public void setNClob(String parameterName, Reader reader) throws SQLException {
-        String methodCall = "setNClob(" + parameterName + ", " + reader + ")";
-        try
-        {
-            realCallableStatement.setNClob(parameterName, reader);
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall, s);
-            throw s;
-        }
-        reportReturn(methodCall);
+        realCallableStatement.setNClob(parameterName, reader);
     }
 
     @Override
     public void setURL(String parameterName, URL val) throws SQLException
     {
-        String methodCall = "setURL(" + parameterName + ", " + val + ")";
-        try
-        {
-            realCallableStatement.setURL(parameterName, val);
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall, s);
-            throw s;
-        }
-        reportReturn(methodCall);
+        realCallableStatement.setURL(parameterName, val);
     }
 
     @Override
     public Array getArray(String parameterName) throws SQLException
     {
-        String methodCall = "getArray(" + parameterName + ")";
-        try
-        {
-            return (Array) reportReturn(methodCall, realCallableStatement.getArray(parameterName));
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall, s);
-            throw s;
-        }
+        return realCallableStatement.getArray(parameterName);
     }
 
     @Override
     public Blob getBlob(String parameterName) throws SQLException
     {
-        String methodCall = "getBlob(" + parameterName + ")";
-        try
-        {
-            return (Blob) reportReturn(methodCall, realCallableStatement.getBlob(parameterName));
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall, s);
-            throw s;
-        }
+        return realCallableStatement.getBlob(parameterName);
     }
 
     @Override
     public Clob getClob(String parameterName) throws SQLException
     {
-        String methodCall = "getClob(" + parameterName + ")";
-        try
-        {
-            return (Clob) reportReturn(methodCall, realCallableStatement.getClob(parameterName));
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall, s);
-            throw s;
-        }
+        return getClob(parameterName);
     }
 
     @Override
     public Date getDate(String parameterName) throws SQLException
     {
-        String methodCall = "getDate(" + parameterName + ")";
-        try
-        {
-            return (Date) reportReturn(methodCall, realCallableStatement.getDate(parameterName));
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall, s);
-            throw s;
-        }
+        return realCallableStatement.getDate(parameterName);
     }
 
     @Override
     public void setDate(String parameterName, Date x) throws SQLException
     {
-        String methodCall = "setDate(" + parameterName + ", " + x + ")";
-        try
-        {
-            realCallableStatement.setDate(parameterName, x);
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall, s);
-            throw s;
-        }
-        reportReturn(methodCall);
+        realCallableStatement.setDate(parameterName, x);
     }
 
     @Override
     public <T> T unwrap(Class<T> iface) throws SQLException {
-        String methodCall = "unwrap(" + (iface==null?"null":iface.getName()) + ")";
-        try
-        {
-            //todo: double check this logic
-            //NOTE: could call super.isWrapperFor to simplify this logic, but it would result in extra log output
-            //because the super classes would be invoked, thus executing their logging methods too...
-            return (T)reportReturn(methodCall,
-                    (iface != null && (iface == CallableStatement.class||iface==PreparedStatement.class||
-                            iface==Statement.class||iface==Spy.class))?
-                            (T)this:
-                            realCallableStatement.unwrap(iface));
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall,s);
-            throw s;
-        }
+        return realCallableStatement.unwrap(iface);
     }
 
     @Override
     public boolean isWrapperFor(Class<?> iface) throws SQLException
     {
-        String methodCall = "isWrapperFor(" + (iface==null?"null":iface.getName()) + ")";
-        try
-        {
-            //NOTE: could call super.isWrapperFor to simplify this logic, but it would result in extra log output
-            //when the super classes would be invoked..
-            return reportReturn(methodCall,
-                    (iface != null && (iface == CallableStatement.class||iface==PreparedStatement.class||iface==Statement.class||iface==Spy.class)) ||
-                            realCallableStatement.isWrapperFor(iface));
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall,s);
-            throw s;
-        }
+        return realCallableStatement.isWrapperFor(iface);
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public <T> T getObject(int parameterIndex, Class<T> type) throws SQLException
     {
-        String methodCall = "getObject(" + parameterIndex + "," + type+ ")";
-        try
-        {
-            return (T) reportReturn(methodCall, realCallableStatement.getObject(parameterIndex,type));
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall, s);
-            throw s;
-        }
+        return realCallableStatement.getObject(parameterIndex, type);
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public <T> T getObject(String parameterName, Class<T> type) throws SQLException
     {
-        String methodCall = "getObject(" + parameterName + "," + type+ ")";
-        try
-        {
-            return (T) reportReturn(methodCall, realCallableStatement.getObject(parameterName,type));
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall, s);
-            throw s;
-        }
+        return realCallableStatement.getObject(parameterName, type);
     }
 
 }

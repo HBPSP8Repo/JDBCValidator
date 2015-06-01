@@ -309,369 +309,143 @@ public class ConnectionValidator implements Connection
     @Override
     public CallableStatement prepareCall(String sql) throws SQLException
     {
-        String methodCall = "prepareCall(" + sql + ")";
-        try
-        {
-            CallableStatement statement = realConnection.prepareCall(sql);
-            return reportReturn(methodCall, new CallableStatementSpy(sql, this, statement, this.log));
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall, s, sql);
-            throw s;
-        }
+        CallableStatement statement = realConnection.prepareCall(sql);
+        return new CallableStatementValidator(sql, this, statement);
     }
 
     @Override
     public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency) throws SQLException
     {
-        String methodCall = "prepareCall(" + sql + ", " + resultSetType + ", " + resultSetConcurrency + ")";
-        try
-        {
-            CallableStatement statement = realConnection.prepareCall(sql, resultSetType, resultSetConcurrency);
-            return reportReturn(methodCall, new CallableStatementSpy(sql, this, statement, this.log));
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall, s, sql);
-            throw s;
-        }
+
+        CallableStatement statement = realConnection.prepareCall(sql, resultSetType, resultSetConcurrency);
+        return new CallableStatementValidator(sql, this, statement);
     }
 
     @Override
     public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency,
                                          int resultSetHoldability) throws SQLException
     {
-        String methodCall = "prepareCall(" + sql + ", " + resultSetType + ", " + resultSetConcurrency + ", " + resultSetHoldability + ")";
-        try
-        {
-            CallableStatement statement = realConnection.prepareCall(sql, resultSetType, resultSetConcurrency,
+        CallableStatement statement = realConnection.prepareCall(sql, resultSetType, resultSetConcurrency,
                     resultSetHoldability);
-            return reportReturn(methodCall, new CallableStatementSpy(sql, this, statement, this.log));
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall, s, sql);
-            throw s;
-        }
+        return new CallableStatementValidator(sql, this, statement);
+
     }
 
     @Override
     public void setCatalog(String catalog) throws SQLException
     {
-        String methodCall = "setCatalog(" + catalog + ")";
-        try
-        {
-            realConnection.setCatalog(catalog);
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall, s);
-            throw s;
-        }
-        reportReturn(methodCall);
+        realConnection.setCatalog(catalog);
     }
 
     @Override
     public String nativeSQL(String sql) throws SQLException
     {
-        String methodCall = "nativeSQL(" + sql + ")";
-        try
-        {
-            return reportReturn(methodCall, realConnection.nativeSQL(sql));
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall, s, sql);
-            throw s;
-        }
+        return realConnection.nativeSQL(sql);
     }
 
     @Override
     public Map<String,Class<?>> getTypeMap() throws SQLException
     {
-        String methodCall = "getTypeMap()";
-        try
-        {
-            return reportReturn(methodCall, realConnection.getTypeMap());
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall, s);
-            throw s;
-        }
+        return realConnection.getTypeMap();
     }
 
     @Override
     public void setAutoCommit(boolean autoCommit) throws SQLException
     {
-        String methodCall = "setAutoCommit(" + autoCommit + ")";
-        try
-        {
-            realConnection.setAutoCommit(autoCommit);
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall, s);
-            throw s;
-        }
-        reportReturn(methodCall);
+        realConnection.setAutoCommit(autoCommit);
     }
 
     @Override
     public String getCatalog() throws SQLException
     {
-        String methodCall = "getCatalog()";
-        try
-        {
-            return reportReturn(methodCall, realConnection.getCatalog());
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall, s);
-            throw s;
-        }
+        return realConnection.getCatalog();
     }
 
     @Override
     public void setTypeMap(java.util.Map<String,Class<?>> map) throws SQLException
     {
-        //todo: dump map??
-        String methodCall = "setTypeMap(" + map + ")";
-        try
-        {
-            realConnection.setTypeMap(map);
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall, s);
-            throw s;
-        }
-        reportReturn(methodCall);
+        realConnection.setTypeMap(map);
     }
 
     @Override
     public void setTransactionIsolation(int level) throws SQLException
     {
-        String methodCall = "setTransactionIsolation(" + level + ")";
-        try
-        {
-            realConnection.setTransactionIsolation(level);
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall, s);
-            throw s;
-        }
-        reportReturn(methodCall);
+        realConnection.setTransactionIsolation(level);
     }
 
     @Override
     public boolean getAutoCommit() throws SQLException
     {
-        String methodCall = "getAutoCommit()";
-        try
-        {
-            return reportReturn(methodCall, realConnection.getAutoCommit());
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall, s);
-            throw s;
-        }
+        return realConnection.getAutoCommit();
     }
 
     @Override
     public int getHoldability() throws SQLException
     {
-        String methodCall = "getHoldability()";
-        try
-        {
-            return reportReturn(methodCall, realConnection.getHoldability());
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall, s);
-            throw s;
-        }
+        return realConnection.getHoldability();
     }
 
     @Override
     public int getTransactionIsolation() throws SQLException
     {
-        String methodCall = "getTransactionIsolation()";
-        try
-        {
-            return reportReturn(methodCall, realConnection.getTransactionIsolation());
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall, s);
-            throw s;
-        }
+        return realConnection.getTransactionIsolation();
     }
 
     @Override
     public void commit() throws SQLException
     {
-        String methodCall = "commit()";
-        try
-        {
-            realConnection.commit();
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall, s);
-            throw s;
-        }
-        reportReturn(methodCall);
+        realConnection.commit();
     }
 
     @Override
     public void rollback() throws SQLException
     {
-        String methodCall = "rollback()";
-        try
-        {
-            realConnection.rollback();
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall, s);
-            throw s;
-        }
-        reportReturn(methodCall);
+        realConnection.rollback();
     }
 
     @Override
     public void close() throws SQLException
     {
-        String methodCall = "close()";
-        long tstart = System.currentTimeMillis();
-        try
-        {
-            realConnection.close();
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall, s, System.currentTimeMillis() - tstart);
-            throw s;
-        }
-        finally
-        {
-            synchronized (connectionTracker)
-            {
-                connectionTracker.remove(connectionNumber);
-            }
-            reportClosed(System.currentTimeMillis() - tstart);
-        }
-        reportReturn(methodCall);
+        realConnection.close();
     }
 
     @Override
     public <T> T unwrap(Class<T> iface) throws SQLException {
-        String methodCall = "unwrap(" + (iface==null?"null":iface.getName()) + ")";
-        try
-        {
-            //todo: double check this logic
-            return (T)reportReturn(methodCall, (iface != null && (iface == Connection.class || iface == Spy.class))?(T)this:realConnection.unwrap(iface));
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall,s);
-            throw s;
-        }
+        return realConnection.unwrap(iface);
     }
 
     @Override
     public boolean isWrapperFor(Class<?> iface) throws SQLException
     {
-        String methodCall = "isWrapperFor(" + (iface==null?"null":iface.getName()) + ")";
-        try
-        {
-            return reportReturn(methodCall, (iface != null && (iface == Connection.class || iface == Spy.class)) ||
-                    realConnection.isWrapperFor(iface));
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall,s);
-            throw s;
-        }
+        return realConnection.isWrapperFor(iface);
     }
 
     @Override
     public void setSchema(String schema) throws SQLException
     {
-        String methodCall = "setSchema(" + schema + ")";
-        try
-        {
-            realConnection.setSchema(schema);
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall,s);
-            throw s;
-        }
+        realConnection.setSchema(schema);
     }
 
     @Override
     public String getSchema() throws SQLException
     {
-        String methodCall = "getSchema()";
-        try
-        {
-            return reportReturn(methodCall,realConnection.getSchema());
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall,s);
-            throw s;
-        }
+        return realConnection.getSchema();
     }
 
     @Override
     public void abort(Executor executor) throws SQLException
     {
-        String methodCall = "abort(" + executor + ")";
-        long tstart = System.currentTimeMillis();
-        try
-        {
-            realConnection.abort(executor);
-            reportAborted(System.currentTimeMillis() - tstart);
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall, s, System.currentTimeMillis() - tstart);
-            throw s;
-        }
+        realConnection.abort(executor);
     }
 
     @Override
     public void setNetworkTimeout(Executor executor, int milliseconds) throws SQLException
     {
-        String methodCall = "setNetworkTimeout(" + executor + ", " + milliseconds + ";";
-        try
-        {
-            realConnection.setNetworkTimeout(executor,milliseconds);
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall,s);
-            throw s;
-        }
+        realConnection.setNetworkTimeout(executor, milliseconds);
     }
 
     @Override
     public int getNetworkTimeout() throws SQLException {
-        String methodCall = "getNetworkTimeout()";
-        try
-        {
-            return reportReturn(methodCall, realConnection.getNetworkTimeout());
-        }
-        catch (SQLException s)
-        {
-            reportException(methodCall,s);
-            throw s;
-        }
+        return realConnection.getNetworkTimeout();
     }
 }
