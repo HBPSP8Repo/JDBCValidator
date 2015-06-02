@@ -215,7 +215,7 @@ public class PreparedStatementValidator  extends StatementValidator implements P
         String methodCall = "execute()";
         //String dumpedSql = dumpedSql();
         //reportSql(dumpedSql, methodCall);
-        reportSql(sql, methodCall);
+        checkSql(sql, methodCall);
 
         return realPreparedStatement.execute();
 
@@ -333,7 +333,7 @@ public class PreparedStatementValidator  extends StatementValidator implements P
         String methodCall = "executeQuery()";
         //String dumpedSql = dumpedSql();
         //reportSql(dumpedSql, methodCall);
-        reportSql(sql, methodCall);
+        checkSql(sql, methodCall);
         return realPreparedStatement.executeQuery();
     }
 
@@ -433,7 +433,7 @@ public class PreparedStatementValidator  extends StatementValidator implements P
         String methodCall = "executeUpdate()";
         //String dumpedSql = dumpedSql();
         //reportSql(dumpedSql, methodCall);
-        reportSql(sql, methodCall);
+        checkSql(sql, methodCall);
         return realPreparedStatement.executeUpdate();
     }
 

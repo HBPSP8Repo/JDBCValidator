@@ -16,11 +16,9 @@ public class DriverValidator implements Driver {
      */
     private Driver lastUnderlyingDriverRequested;
 
-
-
     /**
      * A <code>String</code> representing the prefix of URL
-     * to use log4jdbc.
+     * to use validator.
      */
     static final private String urlPrefix = "jdbc:validate";
 
@@ -37,8 +35,6 @@ public class DriverValidator implements Driver {
      */
     static
     {
-
-
         Set<String> subDrivers = new TreeSet<String>();
 
         if (epfl.dias.Properties.isAutoLoadPopularDrivers()) {
@@ -72,7 +68,7 @@ public class DriverValidator implements Driver {
             // this exception should never be thrown, JDBC just defines it
             // for completeness
             throw (RuntimeException) new RuntimeException
-                    ("could not register log4jdbc driver!").initCause(s);
+                    ("could not register validator driver!").initCause(s);
         }
 
         // instantiate all the supported drivers and remove
@@ -171,7 +167,7 @@ public class DriverValidator implements Driver {
      * @param url JDBC connection URL.
      *
      * @return Underlying driver for the given URL. Null is returned if the URL is
-     *         not a <code>jdbc:log4</code> type URL or there is no underlying
+     *         not a <code>jdbc:validade</c type URL or there is no underlying
      *         driver that accepts the URL.
      *
      * @throws SQLException if a database access error occurs.
@@ -210,10 +206,7 @@ public class DriverValidator implements Driver {
 
     /**
      * Get a Connection to the database from the underlying driver that this
-     * DriverSpy is spying on.  If logging is not enabled, an actual Connection to
-     * the database returned.  If logging is enabled, a ConnectionSpy object which
-     * wraps the real Connection is returned.
-     *
+     * validator is checking on
      * @param url  JDBC connection URL
      * .
      * @param info a list of arbitrary string tag/value pairs as
@@ -234,11 +227,10 @@ public class DriverValidator implements Driver {
         }
 
         // get actual URL that the real driver expects
-        // (strip off <code>#log4jdbcUrlPrefix</code> from url)
+        // (strip off validator from url)
         url = this.getRealUrl(url);
 
         lastUnderlyingDriverRequested = d;
-        long tstart = System.currentTimeMillis();
         Connection c = d.connect(url, info);
 
         if (c == null) {
@@ -246,9 +238,7 @@ public class DriverValidator implements Driver {
         }
 
         ConnectionValidator con = new ConnectionValidator(c);
-
         return con;
-
     }
 
     /**
@@ -282,8 +272,5 @@ public class DriverValidator implements Driver {
     public Logger getParentLogger() throws SQLFeatureNotSupportedException
     {
         return lastUnderlyingDriverRequested.getParentLogger();
-
     }
-
-
 }

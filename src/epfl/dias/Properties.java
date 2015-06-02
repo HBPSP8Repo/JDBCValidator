@@ -103,10 +103,9 @@ public final class Properties
     {
         java.util.Properties props = new java.util.Properties(System.getProperties());
         //try to get the properties file.
-        //default name is log4jdbc.log4j2.properties
         //check first if an alternative name has been provided in the System properties
-        String propertyFile = props.getProperty("log4jdbc.log4j2.properties.file",
-                            "/log4jdbc.log4j2.properties");
+        String propertyFile = props.getProperty("epfl.dias.properties.file",
+                            "/epfl.dias.properties");
 
         InputStream propStream = Properties.class.getResourceAsStream(propertyFile);
 
