@@ -10,94 +10,25 @@ import java.util.Calendar;
 
 /**
  * Created by torcato on 29-05-2015.
+ * Validator class for the for prepare statement
  */
 public class PreparedStatementValidator  extends StatementValidator implements PreparedStatement
 {
 
-
+    /**
+     * the keeps this in memory until execute just to check the sql
+     */
     String sql;
 
-//    /**
-//     * holds list of bind variables for tracing
-//     */
-//    protected final List<String> argTrace = new ArrayList<String>();
-//
-//
-//
-//    /**
-//     * Store an argument (bind variable) into the argTrace list (above) for later dumping.
-//     *
-//     * @param i          index of argument being set.
-//     * @param arg        argument being bound.
-//     */
-//    protected void argTraceSet(int i, Object arg)
-//    {
-//        String tracedArg = arg==null?"null":arg.toString();
-//
-//        i--;  // make the index 0 based
-//        synchronized (argTrace)
-//        {
-//            // if an object is being inserted out of sequence, fill up missing values with null...
-//            while (i >= argTrace.size())
-//            {
-//                argTrace.add(argTrace.size(), null);
-//            }
-//            argTrace.set(i, tracedArg);
-//        }
-//    }
-//
-//    protected String dumpedSql()
-//    {
-//        StringBuffer dumpSql = new StringBuffer();
-//        int lastPos = 0;
-//        int Qpos = sql.indexOf('?', lastPos);  // find position of first question mark
-//        int argIdx = 0;
-//        String arg;
-//
-//        while (Qpos != -1)
-//        {
-//            // get stored argument
-//            synchronized (argTrace)
-//            {
-//                try
-//                {
-//                    arg = argTrace.get(argIdx);
-//                }
-//                catch (IndexOutOfBoundsException e)
-//                {
-//                    arg = "?";
-//                }
-//            }
-//            if (arg == null)
-//            {
-//                arg = "?";
-//            }
-//
-//            argIdx++;
-//
-//            dumpSql.append(sql.substring(lastPos, Qpos));  // dump segment of sql up to question mark.
-//            lastPos = Qpos + 1;
-//            Qpos = sql.indexOf('?', lastPos);
-//            dumpSql.append(arg);
-//        }
-//        if (lastPos < sql.length())
-//        {
-//            dumpSql.append(sql.substring(lastPos, sql.length()));  // dump last segment
-//        }
-//
-//        return dumpSql.toString();
-//    }
-
-
     /**
-     * The real PreparedStatement that this PreparedStatementSpy wraps.
+     * The real PreparedStatement that this class wraps.
      */
     protected PreparedStatement realPreparedStatement;
 
     /**
-     * Get the real PreparedStatement that this PreparedStatementSpy wraps.
+     * Get the real PreparedStatement that this class wraps.
      *
-     * @return the real PreparedStatement that this PreparedStatementSpy wraps.
+     * @return the real PreparedStatement that this wraps.
      */
     public PreparedStatement getRealPreparedStatement()
     {
@@ -167,7 +98,6 @@ public class PreparedStatementValidator  extends StatementValidator implements P
     public void setBoolean(int parameterIndex, boolean x) throws SQLException
     {
         realPreparedStatement.setBoolean(parameterIndex, x);
-
     }
 
     @Override

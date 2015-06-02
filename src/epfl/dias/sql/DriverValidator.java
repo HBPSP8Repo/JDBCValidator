@@ -35,7 +35,7 @@ public class DriverValidator implements Driver {
      */
     static
     {
-        Set<String> subDrivers = new TreeSet<String>();
+        Set<String> subDrivers = new TreeSet<>();
 
         if (epfl.dias.Properties.isAutoLoadPopularDrivers()) {
             subDrivers.add("oracle.jdbc.driver.OracleDriver");
@@ -84,10 +84,10 @@ public class DriverValidator implements Driver {
             }
         }
 
-        if (subDrivers.size() == 0) {
+//        if (subDrivers.size() == 0) {
 //            log.debug("WARNING!  " +
 //                    "log4jdbc couldn't find any underlying jdbc drivers.");
-        }
+//        }
 
 
     }
@@ -237,8 +237,7 @@ public class DriverValidator implements Driver {
             throw new SQLException("invalid or unknown driver url: " + url);
         }
 
-        ConnectionValidator con = new ConnectionValidator(c);
-        return con;
+        return new ConnectionValidator(c);
     }
 
     /**

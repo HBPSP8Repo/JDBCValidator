@@ -7,11 +7,10 @@ import java.util.HashSet;
 
 /**
  * Created by torcato on 29-05-2015.
+ * Class to load properties for the proxy driver
  */
 public final class Properties
 {
-
-
     /**
      * Attempt to Automatically load a set of popular JDBC drivers?
      */
@@ -34,13 +33,12 @@ public final class Properties
 
         // look for additional driver specified in properties
         String moreDrivers = getStringOption(props, "log4jdbc.drivers");
-        AdditionalDrivers = new HashSet<String>();
+        AdditionalDrivers = new HashSet<>();
 
         if (moreDrivers != null) {
             String[] moreDriversArr = moreDrivers.split(",");
-            for (int i = 0; i < moreDriversArr.length; i++) {
-                AdditionalDrivers.add(moreDriversArr[i]);
-
+            for (String s : moreDriversArr) {
+                AdditionalDrivers.add(s);
             }
         }
     }
@@ -120,7 +118,6 @@ public final class Properties
                     propStream.close();
                 } catch (IOException e) {
                     System.out.println("Error when closing properties from classpath: " + e.getMessage());
-
                 }
             }
             System.out.println("properties loaded from classpath ");
@@ -130,10 +127,6 @@ public final class Properties
         }
         return props;
     }
-
-
-
-
 
     /**
      * @return the AutoLoadPopularDrivers

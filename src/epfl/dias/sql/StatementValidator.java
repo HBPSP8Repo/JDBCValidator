@@ -99,9 +99,7 @@ public class StatementValidator implements Statement
     private void _checkSql(String sql, String methodCall)
     {
         //TODO: add checking of sql here
-        System.out.println("got sql:" + sql);
-
-
+        System.out.println("method: " + methodCall + ", sql ->" + sql);
     }
 
     // implementation of interface methods
@@ -114,7 +112,7 @@ public class StatementValidator implements Statement
     @Override
     public int executeUpdate(String sql, String[] columnNames) throws SQLException
     {
-        String methodCall = "executeUpdate(" + sql + ", " + columnNames + ")";
+        String methodCall = "executeUpdate(" + sql + ", " + columnNames.toString() + ")";
         checkStatementSql(sql, methodCall);
 
         return realStatement.executeUpdate(sql, columnNames);
@@ -123,7 +121,7 @@ public class StatementValidator implements Statement
     @Override
     public boolean execute(String sql, String[] columnNames) throws SQLException
     {
-        String methodCall = "execute(" + sql + ", " + columnNames + ")";
+        String methodCall = "execute(" + sql + ", " + columnNames.toString() + ")";
         checkStatementSql(sql, methodCall);
 
         return realStatement.execute(sql, columnNames);
@@ -377,7 +375,6 @@ public class StatementValidator implements Statement
     @Override
     public <T> T unwrap(Class<T> iface) throws SQLException
     {
-
         return realStatement.unwrap(iface);
     }
 
@@ -390,9 +387,7 @@ public class StatementValidator implements Statement
     @Override
     public void closeOnCompletion() throws SQLException
     {
-
         realStatement.closeOnCompletion();
-
     }
 
     @Override
