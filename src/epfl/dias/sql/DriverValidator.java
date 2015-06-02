@@ -73,9 +73,8 @@ public class DriverValidator implements Driver {
 
         // instantiate all the supported drivers and remove
         // those not found
-        String driverClass;
         for (Iterator<String> i = subDrivers.iterator(); i.hasNext();) {
-            driverClass = i.next();
+            String driverClass = i.next();
             try {
                 Class.forName(driverClass);
 //                log.debug("  FOUND DRIVER " + driverClass);
@@ -84,10 +83,9 @@ public class DriverValidator implements Driver {
             }
         }
 
-//        if (subDrivers.size() == 0) {
-//            log.debug("WARNING!  " +
-//                    "log4jdbc couldn't find any underlying jdbc drivers.");
-//        }
+        if (subDrivers.size() == 0) {
+            System.out.println("could not load any driver");
+        }
 
 
     }
