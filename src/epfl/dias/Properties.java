@@ -33,7 +33,7 @@ public final class Properties
 
         // look for additional driver specified in properties
         String moreDrivers = getStringOption(props, "log4jdbc.drivers");
-        AdditionalDrivers = new HashSet<>();
+        AdditionalDrivers = new HashSet<String>();
 
         if (moreDrivers != null) {
             String[] moreDriversArr = moreDrivers.split(",");

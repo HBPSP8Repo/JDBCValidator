@@ -1,7 +1,10 @@
 package epfl.dias.sql;
 
 import java.sql.*;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.logging.Logger;
 
 /**
@@ -20,7 +23,7 @@ public class DriverValidator implements Driver {
      * A <code>String</code> representing the prefix of URL
      * to use validator.
      */
-    static final private String urlPrefix = "jdbc:validate";
+    static final private String urlPrefix = "jdbc:validate:";
 
     /**
      * Default constructor.
@@ -35,7 +38,7 @@ public class DriverValidator implements Driver {
      */
     static
     {
-        Set<String> subDrivers = new TreeSet<>();
+        Set<String> subDrivers = new TreeSet<String>();
 
         if (epfl.dias.Properties.isAutoLoadPopularDrivers()) {
             subDrivers.add("oracle.jdbc.driver.OracleDriver");
@@ -77,6 +80,7 @@ public class DriverValidator implements Driver {
             String driverClass = i.next();
             try {
                 Class.forName(driverClass);
+                System.out.println( "FOUND DRIVER " + driverClass);
 //                log.debug("  FOUND DRIVER " + driverClass);
             } catch (Throwable c) {
                 i.remove();
@@ -199,7 +203,7 @@ public class DriverValidator implements Driver {
      */
     private String getRealUrl(String url)
     {
-        return url.substring(urlPrefix.length());
+        return "jdbc:" + url.substring(urlPrefix.length());
     }
 
     /**
