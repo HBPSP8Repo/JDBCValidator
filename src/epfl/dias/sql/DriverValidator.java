@@ -19,7 +19,7 @@ public class DriverValidator implements Driver {
      */
     private Driver lastUnderlyingDriverRequested;
 
-    private final static Logger logger = Logger.getLogger(DriverValidator.class);
+    private final static Logger log = Logger.getLogger(DriverValidator.class);
     /**
      * A <code>String</code> representing the prefix of URL
      * to use validator.
@@ -43,7 +43,7 @@ public class DriverValidator implements Driver {
 
         if (epfl.dias.Properties.isAutoLoadPopularDrivers()) {
 
-            logger.info("Auto populating drivers");
+            log.info("Auto populating drivers");
             subDrivers.add("oracle.jdbc.driver.OracleDriver");
             subDrivers.add("oracle.jdbc.OracleDriver");
             subDrivers.add("com.sybase.jdbc2.jdbc.SybDriver");
@@ -74,7 +74,7 @@ public class DriverValidator implements Driver {
             // this exception should never be thrown, JDBC just defines it
             // for completeness
 
-            logger.error("could not register DriverValidator " + s);
+            log.error("could not register DriverValidator " + s);
             throw (RuntimeException) new RuntimeException
                     ("could not register validator driver!").initCause(s);
         }
@@ -86,14 +86,14 @@ public class DriverValidator implements Driver {
             try {
                 Class.forName(driverClass);
                 System.out.println( "FOUND DRIVER " + driverClass);
-                logger.info("  FOUND DRIVER " + driverClass);
+                log.info("  FOUND DRIVER " + driverClass);
             } catch (Throwable c) {
                 i.remove();
             }
         }
 
         if (subDrivers.size() == 0) {
-            System.out.println("could not load any driver");
+            log.warn("could not load any driver");
         }
 
 

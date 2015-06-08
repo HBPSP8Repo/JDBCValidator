@@ -106,7 +106,7 @@ public class StatementValidator implements Statement
     {
         //TODO: add checking of sql here
 
-        logger.info("method: " + methodCall + ", sql ->" + sql);
+        logger.debug("method: " + methodCall + ", sql ->" + sql);
     }
 
     // implementation of interface methods

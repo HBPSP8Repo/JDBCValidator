@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.HashSet;
+import org.apache.log4j.Logger;
 
 /**
  * Created by torcato on 29-05-2015.
@@ -21,6 +22,13 @@ public final class Properties
      */
     static final Collection<String> AdditionalDrivers;
 
+    static private final Logger logger = Logger.getLogger(Properties.class);
+
+    static private String filterConfFile;
+
+
+
+
     /**
      * Static initializer.
      */
@@ -29,10 +37,10 @@ public final class Properties
         java.util.Properties props = getProperties();
 
         AutoLoadPopularDrivers = getBooleanOption(props,
-                "log4jdbc.auto.load.popular.drivers", true);
+                "validator.auto.load.popular.drivers", true);
 
         // look for additional driver specified in properties
-        String moreDrivers = getStringOption(props, "log4jdbc.drivers");
+        String moreDrivers = getStringOption(props, "validator.extra.drivers");
         AdditionalDrivers = new HashSet<String>();
 
         if (moreDrivers != null) {
@@ -41,6 +49,9 @@ public final class Properties
                 AdditionalDrivers.add(s);
             }
         }
+
+        filterConfFile = getStringOption(props, "validator.filterConfFile");
+        if (filterConfFile == null) filterConfFile = "query.filter.yaml";
     }
 
     /**
@@ -102,8 +113,8 @@ public final class Properties
         java.util.Properties props = new java.util.Properties(System.getProperties());
         //try to get the properties file.
         //check first if an alternative name has been provided in the System properties
-        String propertyFile = props.getProperty("epfl.dias.properties.file",
-                            "./epfl.dias.properties");
+        String propertyFile = props.getProperty("epfl.jdbc.validator.properties.file",
+                            "./epfl.validator.properties");
 
         InputStream propStream = Properties.class.getResourceAsStream(propertyFile);
 
@@ -111,19 +122,20 @@ public final class Properties
             try {
                 props.load(propStream);
             } catch (IOException e) {
-                //TODO: log this
-                System.out.println("Error when loading properties from classpath: " + e.getMessage());
+                logger.error("Error when loading properties from classpath: ", e);
+
             } finally {
                 try {
                     propStream.close();
                 } catch (IOException e) {
-                    System.out.println("Error when closing properties from classpath: " + e.getMessage());
+                    logger.error("Error closing properties input stream: ", e);
                 }
             }
-            System.out.println("properties loaded from classpath ");
+
+            logger.info("properties loaded from " + propertyFile);
 
         } else {
-            System.out.println("properties not found in classpath. Using System properties.");
+            logger.warn("properties not found in classpath. Using System properties.");
         }
         return props;
     }
@@ -143,4 +155,5 @@ public final class Properties
         return AdditionalDrivers;
     }
 
+    public static String getFilterConFile(){ return filterConfFile; }
 }
