@@ -103,7 +103,7 @@ public final class Properties
         //try to get the properties file.
         //check first if an alternative name has been provided in the System properties
         String propertyFile = props.getProperty("epfl.dias.properties.file",
-                            "/epfl.dias.properties");
+                            "./epfl.dias.properties");
 
         InputStream propStream = Properties.class.getResourceAsStream(propertyFile);
 

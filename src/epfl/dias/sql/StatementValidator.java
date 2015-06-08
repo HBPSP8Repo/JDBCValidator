@@ -1,5 +1,8 @@
 package epfl.dias.sql;
 
+
+import org.apache.log4j.Logger;
+
 import java.sql.*;
 
 /**
@@ -29,6 +32,9 @@ public class StatementValidator implements Statement
     {
         return realStatement;
     }
+
+
+    private final static Logger logger = Logger.getLogger(StatementValidator.class);
 
     /**
      * Create a StatementSpy that wraps another Statement
@@ -99,7 +105,8 @@ public class StatementValidator implements Statement
     private void _checkSql(String sql, String methodCall)
     {
         //TODO: add checking of sql here
-        System.out.println("method: " + methodCall + ", sql ->" + sql);
+
+        logger.info("method: " + methodCall + ", sql ->" + sql);
     }
 
     // implementation of interface methods

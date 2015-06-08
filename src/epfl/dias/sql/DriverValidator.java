@@ -5,7 +5,7 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 
 /**
  * Created by torcato on 29-05-2015.
@@ -19,6 +19,7 @@ public class DriverValidator implements Driver {
      */
     private Driver lastUnderlyingDriverRequested;
 
+    private final static Logger logger = Logger.getLogger(DriverValidator.class);
     /**
      * A <code>String</code> representing the prefix of URL
      * to use validator.
@@ -41,6 +42,8 @@ public class DriverValidator implements Driver {
         Set<String> subDrivers = new TreeSet<String>();
 
         if (epfl.dias.Properties.isAutoLoadPopularDrivers()) {
+
+            logger.info("Auto populating drivers");
             subDrivers.add("oracle.jdbc.driver.OracleDriver");
             subDrivers.add("oracle.jdbc.OracleDriver");
             subDrivers.add("com.sybase.jdbc2.jdbc.SybDriver");
@@ -70,6 +73,8 @@ public class DriverValidator implements Driver {
         } catch (SQLException s) {
             // this exception should never be thrown, JDBC just defines it
             // for completeness
+
+            logger.error("could not register DriverValidator " + s);
             throw (RuntimeException) new RuntimeException
                     ("could not register validator driver!").initCause(s);
         }
@@ -81,7 +86,7 @@ public class DriverValidator implements Driver {
             try {
                 Class.forName(driverClass);
                 System.out.println( "FOUND DRIVER " + driverClass);
-//                log.debug("  FOUND DRIVER " + driverClass);
+                logger.info("  FOUND DRIVER " + driverClass);
             } catch (Throwable c) {
                 i.remove();
             }
@@ -270,7 +275,7 @@ public class DriverValidator implements Driver {
     }
 
     @Override
-    public Logger getParentLogger() throws SQLFeatureNotSupportedException
+    public java.util.logging.Logger getParentLogger() throws SQLFeatureNotSupportedException
     {
         return lastUnderlyingDriverRequested.getParentLogger();
     }
