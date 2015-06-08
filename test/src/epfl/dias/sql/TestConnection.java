@@ -2,6 +2,7 @@ package epfl.dias.sql;
 
 import epfl.dias.Properties;
 import org.apache.log4j.Logger;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.sql.*;
@@ -13,12 +14,20 @@ public class TestConnection {
 
     private static Logger log = Logger.getLogger( Properties.class );
 
+
+    @BeforeClass
+    public static void setProperties() {
+
+        // will load only the postgres driver
+        System.setProperty("validator.auto.load.popular.drivers", "false");
+        System.setProperty("validator.extra.drivers", "org.postgresql.Driver");
+        System.setProperty("validator.filterConfFile", "");
+    }
+
     @Test
     public void TestSimpleQuery() throws ClassNotFoundException, SQLException {
 
-
         Class.forName("epfl.dias.sql.DriverValidator");
-
         String url = "jdbc:validate:postgresql://localhost/CHUV_MIPS";
         String user = "ipython";
         String passwd="ipython4thewin";
@@ -34,4 +43,6 @@ public class TestConnection {
         st.close();
         con.close();
     }
+
+
 }

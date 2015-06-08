@@ -114,7 +114,7 @@ public final class Properties
         //try to get the properties file.
         //check first if an alternative name has been provided in the System properties
         String propertyFile = props.getProperty("epfl.jdbc.validator.properties.file",
-                            "./epfl.validator.properties");
+                            "/epfl.validator.properties");
 
         InputStream propStream = Properties.class.getResourceAsStream(propertyFile);
 
@@ -135,7 +135,7 @@ public final class Properties
             logger.info("properties loaded from " + propertyFile);
 
         } else {
-            logger.warn("properties not found in classpath. Using System properties.");
+            logger.warn("file "+ propertyFile + " not found in classpath. Using System properties.");
         }
         return props;
     }

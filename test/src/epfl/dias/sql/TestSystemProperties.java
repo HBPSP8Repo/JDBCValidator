@@ -24,14 +24,6 @@ public class TestSystemProperties {
     private static Logger log = Logger.getLogger( Properties.class );
 
 
-    /**
-     * Will set all the system properties here
-     */
-    public void TestSystemProperties()
-    {
-
-    }
-
     @Test
     public void testGetFilterConfFile()
     {

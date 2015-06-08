@@ -74,7 +74,7 @@ public class DriverValidator implements Driver {
             // this exception should never be thrown, JDBC just defines it
             // for completeness
 
-            log.error("could not register DriverValidator " + s);
+            log.error("could not register DriverValidator ", s);
             throw (RuntimeException) new RuntimeException
                     ("could not register validator driver!").initCause(s);
         }
@@ -85,8 +85,7 @@ public class DriverValidator implements Driver {
             String driverClass = i.next();
             try {
                 Class.forName(driverClass);
-                System.out.println( "FOUND DRIVER " + driverClass);
-                log.info("  FOUND DRIVER " + driverClass);
+                log.info("FOUND DRIVER " + driverClass);
             } catch (Throwable c) {
                 i.remove();
             }
