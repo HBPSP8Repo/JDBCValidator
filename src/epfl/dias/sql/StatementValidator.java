@@ -1,9 +1,14 @@
 package epfl.dias.sql;
 
 
+import epfl.dias.Properties;
 import org.apache.log4j.Logger;
-
 import java.sql.*;
+
+
+import fr.maatg.fedehr.queryfilter.QueryAnalyzer;
+import fr.maatg.fedehr.queryfilter.status.QueryFilterStatus;
+
 
 /**
  * Created by torcato on 29-05-2015.
@@ -22,6 +27,9 @@ public class StatementValidator implements Statement
      */
     protected Statement realStatement;
 
+    protected QueryAnalyzer queryAnalyzer;
+
+    protected String configName;
 
     /**
      * Get the real Statement that this StatementSpy wraps.
@@ -34,6 +42,7 @@ public class StatementValidator implements Statement
     }
 
 
+
     private final static Logger logger = Logger.getLogger(StatementValidator.class);
 
     /**
@@ -43,7 +52,7 @@ public class StatementValidator implements Statement
      * @param connection Connection that created this Statement.
      * @param realStatement real underlying Statement that this StatementSpy wraps.
      */
-    public StatementValidator(ConnectionValidator connection, Statement realStatement)
+    public StatementValidator(ConnectionValidator connection, Statement realStatement, String config)
     {
         if (realStatement == null)
         {
@@ -51,24 +60,17 @@ public class StatementValidator implements Statement
         }
         if (connection == null)
         {
-            throw new IllegalArgumentException("Must pass in a non null ConnectionSpy");
+            throw new IllegalArgumentException("Must pass in a non null ConnectionValidator");
         }
         this.realStatement = realStatement;
         this.connection = connection;
 
-    }
+        queryAnalyzer = new QueryAnalyzer();
+        configName = config;
 
-//    //@Override
-//    public String getClassType()
-//    {
-//        return "Statement";
-//    }
-//
-//    //@Override
-//    public Integer getConnectionNumber()
-//    {
-//        return connection.getConnectionNumber();
-//    }
+        logger.info("using configuration " + ((configName==null)? "default": configName) );
+
+    }
 
 
     /**
@@ -77,7 +79,7 @@ public class StatementValidator implements Statement
      * @param sql        the SQL being run
      * @param methodCall the name of the method that was running the SQL
      */
-    protected void checkStatementSql(String sql, String methodCall)
+    protected void checkStatementSql(String sql, String methodCall) throws SQLException
     {
         // redirect to one more method call ONLY so that stack trace search is consistent
         // with the reportReturn calls
@@ -90,7 +92,7 @@ public class StatementValidator implements Statement
      * @param sql        the SQL being run
      * @param methodCall the name of the method that was running the SQL
      */
-    protected void checkSql(String sql, String methodCall)
+    protected void checkSql(String sql, String methodCall) throws SQLException
     {
         // redirect to one more method call ONLY so that stack trace search is consistent
         // with the reportReturn calls
@@ -102,11 +104,34 @@ public class StatementValidator implements Statement
      * @param sql   the sql being run
      * @param methodCall the method that called the execution
      */
-    private void _checkSql(String sql, String methodCall)
+    private void _checkSql(String sql, String methodCall) throws SQLException
     {
         //TODO: add checking of sql here
 
         logger.debug("method: " + methodCall + ", sql ->" + sql);
+
+        //TODO: check the license path
+        String licencePath =Properties.getFilterLicenseFile();
+        String queryFilterScript = Properties.getFilterConFile();
+
+        QueryFilterStatus status;
+        try {
+            status = queryAnalyzer.isQueryValid(licencePath, sql, queryFilterScript);
+
+        }
+        catch (Exception e)
+        {
+            throw new SQLException("Error Analysing the query ", e);
+        }
+
+        if (status.isNOK())
+        {
+            logger.error("query did not pass filter :" +
+                                "\n\treason:" +status.getFields().toString() +
+                                "\n\tsql='"+ sql + "'" );
+
+            throw new SQLFilterException("Query did not pass query-filter, fields:" +status.getFields().toString() );
+        }
     }
 
     // implementation of interface methods
@@ -119,7 +144,7 @@ public class StatementValidator implements Statement
     @Override
     public int executeUpdate(String sql, String[] columnNames) throws SQLException
     {
-        String methodCall = "executeUpdate(" + sql + ", " + columnNames.toString() + ")";
+        String methodCall = "executeUpdate(" + sql + ", " + columnNames + ")";
         checkStatementSql(sql, methodCall);
 
         return realStatement.executeUpdate(sql, columnNames);
@@ -128,7 +153,7 @@ public class StatementValidator implements Statement
     @Override
     public boolean execute(String sql, String[] columnNames) throws SQLException
     {
-        String methodCall = "execute(" + sql + ", " + columnNames.toString() + ")";
+        String methodCall = "execute(" + sql + ", " + columnNames + ")";
         checkStatementSql(sql, methodCall);
 
         return realStatement.execute(sql, columnNames);

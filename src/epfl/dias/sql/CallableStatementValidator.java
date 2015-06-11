@@ -37,9 +37,9 @@ public class CallableStatementValidator extends PreparedStatementValidator imple
      * @param realCallableStatement The real CallableStatement that is being spied upon
      */
     public CallableStatementValidator(String sql, ConnectionValidator connection,
-                                CallableStatement realCallableStatement)
+                                CallableStatement realCallableStatement, String config)
     {
-        super(sql, connection, realCallableStatement);
+        super(sql, connection, realCallableStatement, config);
         this.realCallableStatement = realCallableStatement;
     }
 

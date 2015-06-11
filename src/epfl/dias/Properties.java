@@ -2,9 +2,12 @@ package epfl.dias;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collection;
-import java.util.HashSet;
+import java.util.*;
+
 import org.apache.log4j.Logger;
+
+
+
 
 /**
  * Created by torcato on 29-05-2015.
@@ -12,6 +15,7 @@ import org.apache.log4j.Logger;
  */
 public final class Properties
 {
+
     /**
      * Attempt to Automatically load a set of popular JDBC drivers?
      */
@@ -22,11 +26,44 @@ public final class Properties
      */
     static final Collection<String> AdditionalDrivers;
 
-    static private final Logger logger = Logger.getLogger(Properties.class);
 
+    static private final Logger log= Logger.getLogger(Properties.class);
+
+    /**
+     *  Default configuration file for the query filter
+     */
     static private String filterConfFile;
 
+    /**
+     * The license file for the query filter
+     */
+    static private String filterLicenseFile;
 
+    /**
+     *  Default query delay
+     */
+    static Integer queryDelay;
+
+
+    /**
+     * Created by torcato on 09.06.15.
+     * Struct like class to hold specific settings for a single connection
+     */
+    static private class ConnectionsConfig {
+        /**
+         * This will hold the query filter yaml script
+         */
+        public String filterConfigFile;
+        /**
+         * This is a optional parameter to set a delay in each query
+         */
+        public Integer queryDelay;
+    }
+
+    /**
+     *A dictionary to keep all
+     */
+    static private java.util.Map<String, ConnectionsConfig> configs;
 
 
     /**
@@ -41,17 +78,63 @@ public final class Properties
 
         // look for additional driver specified in properties
         String moreDrivers = getStringOption(props, "validator.extra.drivers");
-        AdditionalDrivers = new HashSet<String>();
 
+        AdditionalDrivers = new HashSet<String>();
         if (moreDrivers != null) {
             String[] moreDriversArr = moreDrivers.split(",");
-            for (String s : moreDriversArr) {
-                AdditionalDrivers.add(s);
+            AdditionalDrivers.addAll(Arrays.asList(moreDriversArr));
+        }
+
+        filterConfFile = getStringOption(props, "validator.default.filter.confFile");
+        if (filterConfFile == null) filterConfFile = "default.filter.yaml";
+
+        queryDelay = getIntegerOption(props, "validator.default.query.delay");
+        if(queryDelay == null) queryDelay = 0;
+
+        filterLicenseFile = getStringOption(props, "validator.filter.license.file");
+        //if(filterConfFile == null) filterConfFile = "";
+
+        configs = new HashMap<String, ConnectionsConfig>();
+
+        String conf = getStringOption(props, "validator.configurations");
+        if ( conf!= null)
+        {
+            String[] configsArr = conf.split(",");
+            for(String configName: configsArr)
+            {
+                ConnectionsConfig config = new ConnectionsConfig();
+
+                config.filterConfigFile = getStringOption(props, "validator."+configName+".filter.confFile");
+                if (config.filterConfigFile == null) config.filterConfigFile = filterConfFile;
+
+                config.queryDelay = getIntegerOption(props, "validator." + configName + ".query.delay");
+                if (config.queryDelay == null) config.queryDelay = queryDelay;
+
+                configs.put(configName, config);
+                //connectionsConfig[configName]=config;
             }
         }
 
-        filterConfFile = getStringOption(props, "validator.filterConfFile");
-        if (filterConfFile == null) filterConfFile = "query.filter.yaml";
+        log.info(printConfig());
+    }
+
+    public static String printConfig()
+    {
+        String s ="configuration settings :" +
+                "\n\tvalidator.extra.drivers = " + getAdditionalDrivers() +
+                "\n\tvalidator.auto.load.popular.drivers = " + isAutoLoadPopularDrivers() +
+                "\n\tvalidator.default.filter.confFile = " + getFilterConFile() +
+                "\n\tvalidator.filter.license.file = " + getFilterLicenseFile() +
+                "\n\tvalidator.default.query.delay = " + getQueryDelay() +
+                "\n\tvalidator.configurations = " + getAvailableConfigurations();
+
+        for (String conf : configs.keySet())
+        {
+            s += "\n\tvalidator." + conf + ".filter.confFile = " + getFilterConFile(conf);
+            s += "\n\tvalidator." + conf + ".query.delay = " + getQueryDelay(conf);
+        }
+
+        return s;
     }
 
     /**
@@ -65,9 +148,15 @@ public final class Properties
     private static String getStringOption(java.util.Properties props, String propName)
     {
         String propValue = props.getProperty(propName);
-        if (propValue == null || propValue.length()==0)
+        if (propValue == null)
         {
-            propValue = null; // force to null, even if empty String
+            log.warn("x " + propName + " is not defined");
+        }
+        else if (propValue.length()==0)
+        {
+            // force to null, even if empty String
+            log.warn( propName + " is empty, setting to null");
+            propValue = null;
         }
 
         return propValue;
@@ -90,6 +179,7 @@ public final class Properties
         String propValue = props.getProperty(propName);
         boolean val;
         if (propValue == null) {
+            log.warn("x " + propName + " is not defined");
             return defaultValue;
         }
         propValue = propValue.trim().toLowerCase();
@@ -101,6 +191,42 @@ public final class Properties
                     "on".equals(propValue);
         }
         return val;
+    }
+
+    /**
+     * Get a Long option from a property and
+     * log a debug message about this.
+     *
+     * @param props Properties to get option from.
+     * @param propName property key.
+     *
+     * @return the value of that property key, converted
+     * to a Long.  Or null if not defined or is invalid.
+     */
+    private static Integer getIntegerOption(java.util.Properties props, String propName)
+    {
+        String propValue = props.getProperty(propName);
+        Integer intValue = null;
+
+        if (propValue == null)
+        {
+            log.warn("x " + propName + " is not defined");
+        }
+        else
+        {
+            try
+            {
+                propValue = propValue.trim();
+                intValue = Integer.parseUnsignedInt(propValue);
+                log.debug("  " + propName + " = " + intValue);
+            }
+            catch (NumberFormatException n)
+            {
+                log.warn("x " + propName + " \"" + propValue  +
+                        "\" is not a valid number");
+            }
+        }
+        return intValue;
     }
 
     /**
@@ -122,20 +248,20 @@ public final class Properties
             try {
                 props.load(propStream);
             } catch (IOException e) {
-                logger.error("Error when loading properties from classpath: ", e);
+                log.error("Error when loading properties from classpath: ", e);
 
             } finally {
                 try {
                     propStream.close();
                 } catch (IOException e) {
-                    logger.error("Error closing properties input stream: ", e);
+                    log.error("Error closing properties input stream: ", e);
                 }
             }
 
-            logger.info("properties loaded from " + propertyFile);
+            log.info("properties loaded from " + propertyFile);
 
         } else {
-            logger.warn("file "+ propertyFile + " not found in classpath. Using System properties.");
+            log.warn("file " + propertyFile + " not found in classpath. Using System properties.");
         }
         return props;
     }
@@ -144,16 +270,48 @@ public final class Properties
      * @return the AutoLoadPopularDrivers
      * @see #AutoLoadPopularDrivers
      */
-    public static boolean isAutoLoadPopularDrivers() {
+    public static boolean isAutoLoadPopularDrivers()
+    {
         return AutoLoadPopularDrivers;
     }
     /**
      * @return the AdditionalDrivers
      * @see #AdditionalDrivers
      */
-    public static Collection<String> getAdditionalDrivers() {
+    public static Collection<String> getAdditionalDrivers()
+    {
         return AdditionalDrivers;
     }
 
-    public static String getFilterConFile(){ return filterConfFile; }
+    public static String getFilterConFile()
+    {
+        return filterConfFile;
+    }
+
+    public static String getFilterConFile(String configName)
+    {
+        ConnectionsConfig conf = configs.get(configName);
+        return conf.filterConfigFile;
+    }
+
+    public static Integer getQueryDelay()
+    {
+        return queryDelay;
+    }
+
+    public static Integer getQueryDelay(String configName)
+    {
+        ConnectionsConfig conf = configs.get(configName);
+        return conf.queryDelay;
+    }
+
+    public static Set<String> getAvailableConfigurations()
+    {
+
+        return configs.keySet();
+    }
+    public static String getFilterLicenseFile()
+    {
+        return filterLicenseFile;
+    }
 }

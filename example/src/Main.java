@@ -1,7 +1,10 @@
 import java.sql.*;
 
+
 /**
  * Created by torcato on 6/2/2015.
+ * Example application using the validator driver
+ * This example connects to a local postgres database
  */
 public class Main {
     public static void main(String[] args) {

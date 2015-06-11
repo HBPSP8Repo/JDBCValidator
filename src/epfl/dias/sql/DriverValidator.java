@@ -1,10 +1,11 @@
 package epfl.dias.sql;
 
 import java.sql.*;
-import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import com.sun.deploy.util.StringUtils;
 import org.apache.log4j.Logger;
 
 /**
@@ -146,7 +147,7 @@ public class DriverValidator implements Driver {
     }
 
     /**
-     * Returns true if this is a <code>jdbc:log4</code> URL and if the URL is for
+     * Returns true if this is a <code>dbc:validade</code> URL and if the URL is for
      * an underlying driver that this DriverSpy can spy on.
      *
      * @param url JDBC URL.
@@ -167,7 +168,7 @@ public class DriverValidator implements Driver {
     }
 
     /**
-     * Given a <code>jdbc:log4</code> type URL, find the underlying real driver
+     * Given a <code>dbc:validade</code> type URL, find the underlying real driver
      * that accepts the URL.
      *
      * @param url JDBC connection URL.
@@ -197,17 +198,52 @@ public class DriverValidator implements Driver {
         return null;
     }
 
+    private String[] getUrlAndConf(String url) throws SQLException
+    {
+        String[] parts = url.split("://");
+        String header = parts[0];
+        String rest = parts[1];
+
+        header = header.substring(urlPrefix.length());
+        parts =header.split(":");
+
+        String realUrl = "jdbc:";
+        String conf= null;
+        int start = 0;
+        if(parts.length > 1)
+        {
+            conf= parts[0];
+            start = 1;
+        }
+
+        for(int n = start ; n < parts.length; n++ )
+        {
+            realUrl += parts[n] + ":";
+        }
+
+        realUrl += "//"+ rest;
+        log.debug(url + " ->real url: " + realUrl + ", conf : " + conf);
+
+        String[] out = {realUrl, conf};
+        return out;
+    }
+
     /**
      * Get the actual URL that the real driver expects
-     * (strip off <code>#log4jdbcUrlPrefix</code> from <code>url</code>).
+     * (strip off <code>#urlPrefix</code> from <code>url</code>).
      *
-     * @param url 	A <code>String</code> corresponding to a JDBC url for log4jdbc.
+     * @param url 	A <code>String</code> corresponding to a JDBC url
      * @return 		A <code>String</code> representing url
-     * 				with <code>#log4jdbcUrlPrefix</code> stripped off.
+     * 				with <code>#urlPrefix</code> stripped off.
      */
-    private String getRealUrl(String url)
+    private String getRealUrl(String url) throws SQLException
     {
-        return "jdbc:" + url.substring(urlPrefix.length());
+       return getUrlAndConf(url)[0];
+    }
+
+    private String getConfigurationName(String url)throws SQLException
+    {
+        return getUrlAndConf(url)[1];
     }
 
     /**
@@ -234,16 +270,17 @@ public class DriverValidator implements Driver {
 
         // get actual URL that the real driver expects
         // (strip off validator from url)
-        url = this.getRealUrl(url);
+        String realUrl = this.getRealUrl(url);
 
         lastUnderlyingDriverRequested = d;
-        Connection c = d.connect(url, info);
+        Connection c = d.connect(realUrl, info);
 
         if (c == null) {
-            throw new SQLException("invalid or unknown driver url: " + url);
+            throw new SQLException("invalid or unknown driver url: " + realUrl);
         }
 
-        return new ConnectionValidator(c);
+        String configName = getConfigurationName(url);
+        return new ConnectionValidator(c, configName);
     }
 
     /**

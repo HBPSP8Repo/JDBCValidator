@@ -42,9 +42,9 @@ public class PreparedStatementValidator  extends StatementValidator implements P
      * @param connection         Connection that was called to produce this PreparedStatement.
      * @param realPreparedStatement The actual PreparedStatement that is being spied upon.
      */
-    public PreparedStatementValidator(String sql, ConnectionValidator connection, PreparedStatement realPreparedStatement)
+    public PreparedStatementValidator(String sql, ConnectionValidator connection, PreparedStatement realPreparedStatement, String config)
     {
-        super(connection, realPreparedStatement);  // does null check for us
+        super(connection, realPreparedStatement, config);  // does null check for us
         this.sql = sql;
         this.realPreparedStatement = realPreparedStatement;
     }
