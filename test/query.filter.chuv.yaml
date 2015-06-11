@@ -1,0 +1,36 @@
+aggregate:
+  ## default list
+  - name: "default"
+    isdefault: true
+    function:
+      - 
+        value: "count"
+      - 
+        value: "avg"
+  - name: "agg_patients"
+    function:  
+      - 
+        value: "count"
+      - 
+        value: "avg"
+      - 
+        value: "max"
+      - 
+        value: "last"
+
+# blacklist definition
+selectstatement:
+  tables:
+    - name: "patient"
+      rejectedcolumns:
+        - 
+          name: "id"
+        -
+          name: "year_of_birth"
+          onlyAggregated: "agg_patients"
+whereclause:
+  tables:
+    - name: "patients"
+      rejectedcolumns:
+        - 
+          name: "id"

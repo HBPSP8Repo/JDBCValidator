@@ -6,11 +6,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 
+import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
 import java.sql.*;
-import java.util.Arrays;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static org.junit.Assert.fail;
 
@@ -23,53 +21,82 @@ public class TestQueries {
     private static Logger log = Logger.getLogger( Properties.class );
 
 
+    /**
+     * Sets up the configuration for the tests
+     * @throws ClassNotFoundException
+     * @throws FileNotFoundException
+     * @throws UnsupportedEncodingException
+     */
     @BeforeClass
-    public static void setProperties() throws ClassNotFoundException {
+    public static void setProperties() throws ClassNotFoundException, FileNotFoundException, UnsupportedEncodingException {
 
         // will load only the postgres driver
         System.setProperty("validator.auto.load.popular.drivers", "false");
         System.setProperty("validator.extra.drivers", "org.postgresql.Driver");
-        System.setProperty("validator.default.filter.confFile","query-filter-configuration-file.yaml");
+        System.setProperty("validator.default.filter.confFile","query.filter.chuv.yaml");
+        //Maybe create a different configuration file for the default config
+        System.setProperty("validator.default.filter.confFile","query.filter.chuv.yaml");
+
+        System.setProperty("validator.configurations", "chuv,hug");
+        System.setProperty("validator.chuv.filter.confFile", "query.filter.chuv.yaml");
+        System.setProperty("validator.hug.filter.confFile", "query.filter.hug.yaml");
 
         Class.forName("epfl.dias.sql.DriverValidator");
     }
+
+    /**
+     * Runs a single query against our test DB
+     * @param url the url of the db t connect
+     * @param query the query to run
+     * @throws SQLException
+     */
+    private void runSingleQuery(String url, String query) throws SQLException {
+
+        String user = "ipython";
+        String passwd="ipython4thewin";
+
+        Connection con = null;
+        Statement st = null;
+        ResultSet rs = null;
+
+        try {
+            con = DriverManager.getConnection(url, user, passwd);
+            st = con.createStatement();
+            rs = st.executeQuery(query);
+            if (rs.next()) {
+                log.debug("result of the query :" + rs.getString(1));
+            }
+        }
+        catch(SQLException e)
+        {
+            log.debug(e);
+            throw e;
+        }
+        finally {
+            if (con != null) con.close();
+            if (st != null) st.close();
+            if (rs != null) rs.close();
+        }
+        con.close();
+    }
+
 
     @Test
     public void TestAllowedQuery() throws SQLException {
 
         String url = "jdbc:validate:postgresql://localhost/CHUV_MIPS";
-        String user = "ipython";
-        String passwd="ipython4thewin";
-
-        Connection con = DriverManager.getConnection(url, user, passwd);
-        Statement st = con.createStatement();
-
-        ResultSet rs = st.executeQuery("SELECT count(patient.year_of_birth) from patient");
-        if (rs.next()) {
-            log.debug("result of the query :" + rs.getString(1));
-        }
-        rs.close();
-        st.close();
-        con.close();
+        String query = "SELECT count(patient.year_of_birth) from patient";
+        runSingleQuery(url, query);
     }
 
     @Test
     public void TestNotAllowedQuery() throws  SQLException {
 
         String url = "jdbc:validate:postgresql://localhost/CHUV_MIPS";
-        String user = "ipython";
-        String passwd="ipython4thewin";
-
-        Connection con = DriverManager.getConnection(url, user, passwd);
-        Statement st = con.createStatement();
-
-        ResultSet rs = null;
+        String query = "SELECT patient.* FROM patient";
         try {
-            rs = st.executeQuery("SELECT patient.* FROM patient");
-            if (rs.next()) {
-                log.debug("result of the query :" + rs.getString(1));
-            }
 
+            runSingleQuery(url, query);
             fail("query should not pass the filter");
         }
         catch(SQLFilterException e)
@@ -78,84 +105,25 @@ public class TestQueries {
             log.debug(e);
         }
 
-        if (rs != null) rs.close();
-        st.close();
-        con.close();
     }
 
-    void printMatch(java.util.regex.Pattern p, String s)
-    {
-        java.util.regex.Matcher m = p.matcher(s);
-        if(m.find())
-        {
-            log.debug("group count " + m.groupCount());
-            for (int n = 0 ; n <= m.groupCount() ; n ++)
-            {
-                log.debug("Found value: " + n +":"+ m.group(n));
-            }
-        }
-        else
-        {
-            log.debug(" No match found for: " + s);
-        }
-    }
-
-    static private String urlPrefix = "jdbc:validate:";
-
-    private String[] getUrlAndConf(String url) throws SQLException
-    {
-        String[] parts = url.split("://");
-        String header = parts[0];
-        String rest = parts[1];
-
-        header = header.substring(urlPrefix.length());
-        parts =header.split(":");
-
-        String realUrl = "jdbc:";
-        String conf= null;
-        int start = 0;
-        if(parts.length > 1)
-        {
-            conf= parts[0];
-            start = 1;
-        }
-
-        for(int n = start ; n < parts.length; n++ )
-        {
-            realUrl += parts[n] + ":";
-        }
-
-        realUrl += "//"+ rest;
-        log.debug(url + " ->real url: " + realUrl + ", conf : " + conf);
-
-        String[] out = {realUrl, conf};
-        return out;
-    }
     @Test
-    public void testConfigurations() throws SQLException
-    {
-//        String url = "jdbc:validate:conf1:postgresql://localhost/CHUV_MIPS";
-//        String user = "ipython";
-//        String passwd="ipython4thewin";
-//
-//        Connection con = DriverManager.getConnection(url, user, passwd);
-//        Statement st = con.createStatement();
-//
-//        ResultSet rs = null;
-//
-//        rs = st.executeQuery("SELECT count(patient.year_of_birth) FROM patient");
-//        if (rs.next()) {
-//            log.debug("result of the query :" + rs.getString(1));
-//        }
-//
-//
-//
-//        if (rs != null) rs.close();
-//        st.close();
-//        con.close();
+    public void testConfigurations() throws SQLException {
 
-        log.debug(getUrlAndConf("jdbc:validate:conf1:postgresql://localhost/CHUV_MIPS"));
-        fail("testing");
+        String query = "SELECT patient.year_of_birth FROM patient limit 1";
+        String url1 = "jdbc:validate:chuv:postgresql://localhost/CHUV_MIPS";
+        try {
 
+            runSingleQuery(url1, query);
+            fail("query should not pass the filter");
+        } catch (SQLFilterException e) {
+            log.debug("Exception was thrown as it should");
+            log.debug(e);
+        }
+
+        String url2 = "jdbc:validate:hug:postgresql://localhost/CHUV_MIPS";
+        //this query has to pass
+        // the limit for year_of_birth is not configured in query.filter.hug.yaml
+        runSingleQuery(url2, query);
     }
 }

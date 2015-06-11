@@ -14,7 +14,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 
-import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by torcato on 08.06.15.
@@ -109,7 +109,7 @@ public class TestFileProperties {
 
         //as these are not defined in the properties file it will take the default values
         assertEquals(defaultFilterConf, Properties.getFilterConFile("hug"));
-        assertEquals( defaultQueryDelay, Properties.getQueryDelay("chuv") );
+        assertEquals( defaultQueryDelay, Properties.getQueryDelay("chuv"));
 
     }
 }

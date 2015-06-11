@@ -1,28 +1,23 @@
 package epfl.dias.sql;
 
 import com.sun.deploy.util.StringUtils;
-import epfl.dias.Properties;
 import org.apache.log4j.Logger;
+
+import java.util.Arrays;
+import java.util.HashSet;
+
+import static org.junit.Assert.assertEquals;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 
-import java.util.Arrays;
-
-import java.util.HashSet;
-
-
-import static junit.framework.Assert.assertEquals;
-
+import epfl.dias.Properties;
 
 /**
  * Created by torcato on 08-06-2015.
  * Unit tests for the properties class
  */
 public class TestSystemProperties {
-
-
-    static private Logger log = Logger.getLogger( Properties.class );
 
     private static HashSet<String> drivers = new HashSet<String>( Arrays.asList("lala", "cucu", "pipi") );
     private static HashSet<String> configurations = new HashSet<String>( Arrays.asList("chuv", "hug") );
@@ -50,6 +45,10 @@ public class TestSystemProperties {
         System.setProperty("validator.hug.query.delay", "2");
 
     }
+
+    /**
+     * Tests the global configurations/default
+     */
     @Test
     public void testDefaultconfig()
     {
@@ -62,6 +61,9 @@ public class TestSystemProperties {
 
     }
 
+    /**
+     * Tests the non global settings, filter config script and  query delay
+     */
     @Test
     public void testConfigurations()
     {

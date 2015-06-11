@@ -290,8 +290,14 @@ public final class Properties
 
     public static String getFilterConFile(String configName)
     {
-        ConnectionsConfig conf = configs.get(configName);
-        return conf.filterConfigFile;
+        if(configName != null) {
+            ConnectionsConfig conf = configs.get(configName);
+            return conf.filterConfigFile;
+        }
+        else
+        {
+            return getFilterConFile();
+        }
     }
 
     public static Integer getQueryDelay()

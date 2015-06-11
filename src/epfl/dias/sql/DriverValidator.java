@@ -2,10 +2,6 @@ package epfl.dias.sql;
 
 import java.sql.*;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import com.sun.deploy.util.StringUtils;
 import org.apache.log4j.Logger;
 
 /**
@@ -222,10 +218,8 @@ public class DriverValidator implements Driver {
         }
 
         realUrl += "//"+ rest;
-        log.debug(url + " ->real url: " + realUrl + ", conf : " + conf);
 
-        String[] out = {realUrl, conf};
-        return out;
+        return new String[]{realUrl, conf};
     }
 
     /**
@@ -280,6 +274,7 @@ public class DriverValidator implements Driver {
         }
 
         String configName = getConfigurationName(url);
+        log.debug("Creating connection-> url:"+ url +", real url:" + realUrl + ", conf: " + configName);
         return new ConnectionValidator(c, configName);
     }
 
