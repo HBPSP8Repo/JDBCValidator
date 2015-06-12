@@ -1,11 +1,11 @@
 package epfl.dias.sql;
 
-import java.sql.SQLException;
 
 /**
  * Created by torcato on 10.06.15.
+ * Exception when a query does no pass the check
  */
-public class SQLFilterException extends SQLException {
+public class SQLFilterException extends ValidatorException {
     public SQLFilterException(String msg) {
         super(msg);
     }

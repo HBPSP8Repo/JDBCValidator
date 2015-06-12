@@ -1,7 +1,6 @@
 package epfl.dias.sql;
 
 import com.sun.deploy.util.StringUtils;
-import org.apache.log4j.Logger;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -9,9 +8,6 @@ import java.util.HashSet;
 import static org.junit.Assert.assertEquals;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-
-import epfl.dias.Properties;
 
 /**
  * Created by torcato on 08-06-2015.
@@ -32,6 +28,18 @@ public class TestSystemProperties {
     @BeforeClass
     public static void setProperties()
     {
+        // clears all properties to be sure
+        System.clearProperty("validator.auto.load.popular.drivers");
+        System.clearProperty("validator.extra.drivers");
+        System.clearProperty("validator.default.filter.confFile");
+        System.clearProperty("validator.default.query.delay");
+        System.clearProperty("validator.filter.license.file");
+        System.clearProperty("validator.configurations");
+        System.clearProperty("validator.chuv.filter.confFile");
+        System.clearProperty("validator.hug.filter.confFile");
+        System.clearProperty("validator.hug.query.delay");
+        System.clearProperty("validator.chuv.query.delay");
+
 
         System.setProperty("validator.auto.load.popular.drivers", autoLoadDrivers ? "true" : "false");
         // creates a comma separated string from drivers and sets to the property
@@ -43,6 +51,7 @@ public class TestSystemProperties {
         System.setProperty("validator.configurations", StringUtils.join(configurations, ",") );
         System.setProperty("validator.chuv.filter.confFile", "/tmp/conf1.yaml");
         System.setProperty("validator.hug.query.delay", "2");
+        Properties.reloadConfig();
 
     }
 

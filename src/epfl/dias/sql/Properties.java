@@ -1,4 +1,4 @@
-package epfl.dias;
+package epfl.dias.sql;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,12 +19,12 @@ public final class Properties
     /**
      * Attempt to Automatically load a set of popular JDBC drivers?
      */
-    static final boolean AutoLoadPopularDrivers;
+    static private boolean AutoLoadPopularDrivers;
     /**
      * A <code>Collection</code> of <code>String</code>s listing the additional drivers
      * to use beside the default drivers auto-loaded.
      */
-    static final Collection<String> AdditionalDrivers;
+    static private Collection<String> AdditionalDrivers;
 
 
     static private final Logger log= Logger.getLogger(Properties.class);
@@ -70,6 +70,11 @@ public final class Properties
      * Static initializer.
      */
     static
+    {
+        reloadConfig();
+    }
+
+    static void reloadConfig()
     {
         java.util.Properties props = getProperties();
 

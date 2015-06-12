@@ -1,7 +1,6 @@
 package epfl.dias.sql;
 
 
-import epfl.dias.Properties;
 import org.apache.log4j.Logger;
 import java.sql.*;
 
@@ -208,6 +207,7 @@ public class StatementValidator implements Statement
     @Override
     public int[] executeBatch() throws SQLException
     {
+        //TODO: add cheking of queries on executeBatch instead of
         return realStatement.executeBatch();
     }
 

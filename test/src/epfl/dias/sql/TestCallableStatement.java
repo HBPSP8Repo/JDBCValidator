@@ -7,10 +7,10 @@ import java.sql.*;
  * Tests for the prepared statement
  * Will perform the same tests as TestQueries but use instead a CallableStatement
  */
-public class TestCallableStatement extends TestStatement {
+public class TestCallableStatement extends TestStatementAncestor {
 
     @Override
-    protected void runSingleQuery(String url, String query) throws SQLException {
+    protected void runExecuteQuery(String url, String query) throws SQLException {
 
         String user = "ipython";
         String passwd="ipython4thewin";
@@ -40,4 +40,29 @@ public class TestCallableStatement extends TestStatement {
         }
         con.close();
     }
+
+    @Override
+    protected void runExecute(String url, String query) throws SQLException
+    {
+        Connection con = null;
+        CallableStatement st = null;
+
+        try {
+            con = connect(url);
+            st = con.prepareCall(query);
+            st.execute();
+
+        }
+        catch(SQLException e)
+        {
+            log.debug(e);
+            throw e;
+        }
+        finally {
+            if (con != null) con.close();
+            if (st != null) st.close();
+        }
+        con.close();
+    }
+
 }

@@ -21,7 +21,7 @@ public class DriverValidator implements Driver {
      * A <code>String</code> representing the prefix of URL
      * to use validator.
      */
-    static final private String urlPrefix = "jdbc:validate:";
+    static final private String urlPrefix = "validate:";
 
     /**
      * Default constructor.
@@ -38,7 +38,7 @@ public class DriverValidator implements Driver {
     {
         Set<String> subDrivers = new TreeSet<String>();
 
-        if (epfl.dias.Properties.isAutoLoadPopularDrivers()) {
+        if (Properties.isAutoLoadPopularDrivers()) {
 
             log.info("Auto populating drivers");
             subDrivers.add("oracle.jdbc.driver.OracleDriver");
@@ -63,7 +63,7 @@ public class DriverValidator implements Driver {
         }
 
         // look for additional driver specified in properties
-        subDrivers.addAll(epfl.dias.Properties.getAdditionalDrivers());
+        subDrivers.addAll(Properties.getAdditionalDrivers());
 
         try {
             DriverManager.registerDriver(new DriverValidator());
@@ -177,7 +177,7 @@ public class DriverValidator implements Driver {
     private Driver getUnderlyingDriver(String url) throws SQLException
     {
         if (url.startsWith(urlPrefix)) {
-            url = this.getRealUrl(url);
+            url = getRealUrl(url);
 
             Enumeration<Driver> e = DriverManager.getDrivers();
 
@@ -193,33 +193,67 @@ public class DriverValidator implements Driver {
         return null;
     }
 
-    private String[] getUrlAndConf(String url) throws SQLException
-    {
-        String[] parts = url.split("://");
-        String header = parts[0];
-        String rest = parts[1];
-
-        header = header.substring(urlPrefix.length());
-        parts =header.split(":");
-
-        String realUrl = "jdbc:";
-        String conf= null;
-        int start = 0;
-        if(parts.length > 1)
+    private static String[] getUrlAndConf(String url) throws InvalidUrlException {
+        if (!url.startsWith(urlPrefix))
         {
-            conf= parts[0];
-            start = 1;
+            return  new String[]{url, null};
         }
 
-        for(int n = start ; n < parts.length; n++ )
+        int pos = url.indexOf("jdbc:");
+        if (pos < 0)
         {
-            realUrl += parts[n] + ":";
+            throw new InvalidUrlException("could not parse url " + url);
         }
 
-        realUrl += "//"+ rest;
+        String prefix = url.substring(0, pos);
+        url = url.substring(pos);
 
-        return new String[]{realUrl, conf};
+        String[] parts = prefix.split(":");
+
+        if (parts.length > 1)
+        {
+            return new String[] {url, parts[1]};
+        }
+        else
+        {
+            return new String[] {url, null};
+        }
     }
+
+//    private static String[] getUrlAndConf(String url)
+//    {
+//        if (!url.startsWith(urlPrefix))
+//        {
+//            return  new String[]{url, null};
+//        }
+//
+//        String[] urlParts = url.split("//");
+//        String header = urlParts[0];
+//
+//        header = header.substring(urlPrefix.length());
+//        String[] headerParts =header.split(":");
+//
+//        String realUrl = "jdbc:";
+//        String conf= null;
+//        int start = 0;
+//        if(headerParts.length > 1)
+//        {
+//            conf= headerParts[0];
+//            start = 1;
+//        }
+//
+//        for(int n = start ; n < headerParts.length; n++ )
+//        {
+//            realUrl += headerParts[n] + ":";
+//        }
+//
+//        for(int n = 1 ; n < urlParts.length; n++)
+//        {
+//            realUrl += "//" + urlParts[n];
+//        }
+//
+//        return new String[]{realUrl, conf};
+//    }
 
     /**
      * Get the actual URL that the real driver expects
@@ -229,12 +263,12 @@ public class DriverValidator implements Driver {
      * @return 		A <code>String</code> representing url
      * 				with <code>#urlPrefix</code> stripped off.
      */
-    private String getRealUrl(String url) throws SQLException
+    static String getRealUrl(String url) throws SQLException
     {
        return getUrlAndConf(url)[0];
     }
 
-    private String getConfigurationName(String url)throws SQLException
+    static String getConfigurationName(String url)throws SQLException
     {
         return getUrlAndConf(url)[1];
     }
@@ -263,7 +297,7 @@ public class DriverValidator implements Driver {
 
         // get actual URL that the real driver expects
         // (strip off validator from url)
-        String realUrl = this.getRealUrl(url);
+        String realUrl = getRealUrl(url);
 
         lastUnderlyingDriverRequested = d;
         Connection c = d.connect(realUrl, info);

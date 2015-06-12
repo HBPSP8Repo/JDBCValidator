@@ -1,7 +1,6 @@
 package epfl.dias.sql;
 
 import com.sun.deploy.util.StringUtils;
-import epfl.dias.Properties;
 import org.apache.log4j.Logger;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -45,11 +44,21 @@ public class TestFileProperties {
 
         try {
 
+            // clears all properties to be sure
+            System.clearProperty("validator.auto.load.popular.drivers");
+            System.clearProperty("validator.extra.drivers");
+            System.clearProperty("validator.default.filter.confFile");
+            System.clearProperty("validator.default.query.delay");
+            System.clearProperty("validator.filter.license.file");
+            System.clearProperty("validator.configurations");
+            System.clearProperty("validator.chuv.filter.confFile");
+            System.clearProperty("validator.hug.filter.confFile");
+            System.clearProperty("validator.hug.query.delay");
+            System.clearProperty("validator.chuv.query.delay");
+
             // sets the file to use
             System.setProperty("epfl.jdbc.validator.properties.file", propertiesFile);
-
             PrintWriter writer = new PrintWriter(path + propertiesFile, "UTF-8");
-
             writer.write("validator.auto.load.popular.drivers="+autoLoadDrivers+"\n");
             // creates a comma separated string from drivers and sets to the property
             writer.write("validator.extra.drivers = " + StringUtils.join(drivers, ",") + "\n");
@@ -59,9 +68,13 @@ public class TestFileProperties {
 
             writer.write("validator.configurations = " + StringUtils.join(configurations, ",") + "\n");
             writer.write("validator.chuv.filter.confFile = /tmp/conf1.yaml\n");
+            // to be sure there are no properties set
+
             writer.write("validator.hug.query.delay = 2");
 
             writer.close();
+
+            Properties.reloadConfig();
 
         }
         catch(Exception e)
