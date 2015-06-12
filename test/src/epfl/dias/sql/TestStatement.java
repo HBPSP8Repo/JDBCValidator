@@ -14,18 +14,18 @@ import static org.junit.Assert.fail;
 
 /**
  * Created by torcato on 08.06.15.
- * Test cases for sql queries
+ * Test cases for statement queries
  */
-public class TestQueries {
+public class TestStatement {
 
-    private static Logger log = Logger.getLogger( Properties.class );
+    protected static Logger log = Logger.getLogger( Properties.class );
 
 
     /**
      * Sets up the configuration for the tests
      * @throws ClassNotFoundException
-     * @throws FileNotFoundException
-     * @throws UnsupportedEncodingException
+     * @throws java.io.FileNotFoundException
+     * @throws java.io.UnsupportedEncodingException
      */
     @BeforeClass
     public static void setProperties() throws ClassNotFoundException, FileNotFoundException, UnsupportedEncodingException {
@@ -50,7 +50,7 @@ public class TestQueries {
      * @param query the query to run
      * @throws SQLException
      */
-    private void runSingleQuery(String url, String query) throws SQLException {
+    protected void runSingleQuery(String url, String query) throws SQLException {
 
         String user = "ipython";
         String passwd="ipython4thewin";
@@ -63,7 +63,8 @@ public class TestQueries {
             con = DriverManager.getConnection(url, user, passwd);
             st = con.createStatement();
             rs = st.executeQuery(query);
-            if (rs.next()) {
+            if (rs.next())
+            {
                 log.debug("result of the query :" + rs.getString(1));
             }
         }

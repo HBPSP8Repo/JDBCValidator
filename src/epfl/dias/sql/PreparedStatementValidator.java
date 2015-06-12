@@ -142,7 +142,7 @@ public class PreparedStatementValidator  extends StatementValidator implements P
     @Override
     public boolean execute() throws SQLException
     {
-        String methodCall = "execute()";
+        String methodCall =  "execute()";
         //String dumpedSql = dumpedSql();
         //reportSql(dumpedSql, methodCall);
         checkSql(sql, methodCall);

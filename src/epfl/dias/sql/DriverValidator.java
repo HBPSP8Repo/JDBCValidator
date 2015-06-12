@@ -78,7 +78,8 @@ public class DriverValidator implements Driver {
 
         // instantiate all the supported drivers and remove
         // those not found
-        for (Iterator<String> i = subDrivers.iterator(); i.hasNext();) {
+        for (Iterator<String> i = subDrivers.iterator(); i.hasNext();)
+        {
             String driverClass = i.next();
             try {
                 Class.forName(driverClass);
@@ -88,11 +89,9 @@ public class DriverValidator implements Driver {
             }
         }
 
-        if (subDrivers.size() == 0) {
+        if (subDrivers.size() == 0){
             log.warn("could not load any driver");
         }
-
-
     }
 
     /**

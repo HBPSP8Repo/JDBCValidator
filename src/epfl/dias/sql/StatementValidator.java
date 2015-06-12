@@ -108,7 +108,8 @@ public class StatementValidator implements Statement
     {
         //TODO: add checking of sql here
 
-        logger.debug("Checking sql, conf: " +configName+ ", method: " + methodCall + ", sql: " + sql);
+        logger.debug("Checking sql, conf: " +configName+ ", method: "
+                +this.getClass().getName()+ "."+ methodCall + ", sql: " + sql);
 
         //TODO: check the license path
         String licencePath =Properties.getFilterLicenseFile();
