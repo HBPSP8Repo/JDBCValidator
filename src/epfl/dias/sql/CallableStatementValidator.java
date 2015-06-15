@@ -15,12 +15,12 @@ public class CallableStatementValidator extends PreparedStatementValidator imple
 {
 
     /**
-     * The real underlying CallableStatement that this CallableStatementSpy wraps.
+     * The real underlying CallableStatement that this CallableStatementValidator wraps.
      */
     private CallableStatement realCallableStatement;
 
     /**
-     * Get the real underlying CallableStatement that this CallableStatementSpy wraps.
+     * Get the real underlying CallableStatement that this CallableStatementValidator wraps.
      *
      * @return the real underlying CallableStatement.
      */
@@ -30,10 +30,10 @@ public class CallableStatementValidator extends PreparedStatementValidator imple
     }
 
     /**
-     * Create a CallableStatementSpy (JDBC 4 version) to spy upon a CallableStatement.
+     * Create a CallableStatementValidator (JDBC 4 version) to validate upon a CallableStatement.
      *
      * @param sql                   The SQL used for this CallableStatement
-     * @param connection         The ConnectionSpy which produced this CallableStatementSpy
+     * @param connection         The ConnectionValidator which produced this CallableStatementValidator
      * @param realCallableStatement The real CallableStatement that is being spied upon
      */
     public CallableStatementValidator(String sql, ConnectionValidator connection,
@@ -562,27 +562,27 @@ public class CallableStatementValidator extends PreparedStatementValidator imple
 
     @Override
     public String getNString(int parameterIndex) throws SQLException {
-        return getNString(parameterIndex);
+        return realCallableStatement.getNString(parameterIndex);
     }
 
     @Override
     public String getNString(String parameterName) throws SQLException {
-        return getNString(parameterName);
+        return realCallableStatement.getNString(parameterName);
     }
 
     @Override
     public Reader getNCharacterStream(int parameterIndex) throws SQLException {
-        return getNCharacterStream(parameterIndex);
+        return realCallableStatement.getNCharacterStream(parameterIndex);
     }
 
     @Override
     public Reader getNCharacterStream(String parameterName) throws SQLException {
-        return getNCharacterStream(parameterName);
+        return realCallableStatement.getNCharacterStream(parameterName);
     }
 
     @Override
     public Reader getCharacterStream(int parameterIndex) throws SQLException {
-        return getCharacterStream(parameterIndex);
+        return realCallableStatement.getCharacterStream(parameterIndex);
     }
 
     @Override
@@ -671,7 +671,7 @@ public class CallableStatementValidator extends PreparedStatementValidator imple
     @Override
     public Clob getClob(String parameterName) throws SQLException
     {
-        return getClob(parameterName);
+        return realCallableStatement.getClob(parameterName);
     }
 
     @Override

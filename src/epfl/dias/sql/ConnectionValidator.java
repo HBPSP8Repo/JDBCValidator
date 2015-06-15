@@ -5,6 +5,7 @@ import java.util.*;
 import java.util.concurrent.Executor;
 
 /**
+ * Connection wrapper class for the validator.
  * Created by torcato on 29-05-2015.
  */
 public class ConnectionValidator implements Connection
@@ -25,9 +26,9 @@ public class ConnectionValidator implements Connection
     private String configName;
 
     /**
-     * Create a new ConnectionSpy that wraps a given Connection.
+     * Create a new ConnectionValidator that wraps a given Connection.
      *
-     * @param realConnection &quot;real&quot; Connection that this ConnectionSpy wraps.
+     * @param realConnection &quot;real&quot; Connection that this ConnectionValidator wraps.
      */
     public ConnectionValidator(Connection realConnection, String config)
     {
@@ -212,7 +213,7 @@ public class ConnectionValidator implements Connection
     }
 
     @Override
-    public void setClientInfo(Properties properties) throws SQLClientInfoException {
+    public void setClientInfo(java.util.Properties properties) throws SQLClientInfoException {
         realConnection.setClientInfo(properties);
     }
 
@@ -222,7 +223,7 @@ public class ConnectionValidator implements Connection
     }
 
     @Override
-    public Properties getClientInfo() throws SQLException {
+    public java.util.Properties getClientInfo() throws SQLException {
         return realConnection.getClientInfo();
     }
 

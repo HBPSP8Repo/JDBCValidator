@@ -36,7 +36,7 @@ public class PreparedStatementValidator  extends StatementValidator implements P
     }
 
     /**
-     * Create a PreparedStatementSpy (JDBC 4 version) for logging activity of another PreparedStatement.
+     * Create a PreparedStatementValidator (JDBC 4 version) for logging activity of another PreparedStatement.
      *
      * @param sql                   SQL for the prepared statement that is being spied upon.
      * @param connection         Connection that was called to produce this PreparedStatement.

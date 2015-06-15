@@ -143,7 +143,7 @@ public class DriverValidator implements Driver {
 
     /**
      * Returns true if this is a <code>dbc:validade</code> URL and if the URL is for
-     * an underlying driver that this DriverSpy can spy on.
+     * an underlying driver that this DriverValidator can Validator on.
      *
      * @param url JDBC URL.
      *

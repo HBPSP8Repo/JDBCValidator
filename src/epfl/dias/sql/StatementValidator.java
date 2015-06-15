@@ -22,7 +22,7 @@ public class StatementValidator implements Statement
     protected ConnectionValidator connection;
 
     /**
-     * The real statement that this StatementSpy wraps.
+     * The real statement that this StatementValidator wraps.
      */
     protected Statement realStatement;
 
@@ -31,9 +31,9 @@ public class StatementValidator implements Statement
     protected String configName;
 
     /**
-     * Get the real Statement that this StatementSpy wraps.
+     * Get the real Statement that this StatementValidator wraps.
      *
-     * @return the real Statement that this StatementSpy wraps.
+     * @return the real Statement that this StatementValidator wraps.
      */
     public Statement getRealStatement()
     {
@@ -45,11 +45,11 @@ public class StatementValidator implements Statement
     private final static Logger logger = Logger.getLogger(StatementValidator.class);
 
     /**
-     * Create a StatementSpy that wraps another Statement
+     * Create a Statement validator that wraps another Statement
      * for the purpose of logging all method calls, sql, exceptions and return values.
      *
      * @param connection Connection that created this Statement.
-     * @param realStatement real underlying Statement that this StatementSpy wraps.
+     * @param realStatement real underlying Statement that this StatementValidator wraps.
      */
     public StatementValidator(ConnectionValidator connection, Statement realStatement, String config)
     {
@@ -73,7 +73,7 @@ public class StatementValidator implements Statement
 
 
     /**
-     * Report SQL for logging with a warning that it was generated from a statement.
+     *Checks the
      *
      * @param sql        the SQL being run
      * @param methodCall the name of the method that was running the SQL
@@ -86,7 +86,7 @@ public class StatementValidator implements Statement
     }
 
     /**
-     * Report SQL for logging.
+     * Check SQL query
      *
      * @param sql        the SQL being run
      * @param methodCall the name of the method that was running the SQL
@@ -121,7 +121,7 @@ public class StatementValidator implements Statement
         }
         catch (Exception e)
         {
-            throw new SQLException("Error Analysing the query ", e);
+            throw new ValidatorException("Error Analysing the query ", e);
         }
 
         if (status.isNOK())
